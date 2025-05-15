@@ -3,7 +3,7 @@ import os
 from werkzeug.utils import secure_filename
 from flask_cors import CORS  # Import CORS
 from validate_document import validate_document
-
+  
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
@@ -49,14 +49,24 @@ def home():
 
         # Call the validation function
         try:
-            reference_text = "expectedtextinavaliddocument"  # Replace with actual reference text for validation
+    # Step 1: Extract reference text from template image using EasyOCR
+            import easyocr
+            reader = easyocr.Reader(['en'])
+            template_result = reader.readtext(template_path)
+            reference_text = ' '.join([text[1] for text in template_result])
+
+    # Step 2: Validate reference text isn't empty
+            if not reference_text.strip():
+                return jsonify({"error": "Failed to extract reference text from the template image."}), 400
+
+    # Step 3: Pass extracted text into validator
             results = validate_document(document_path, template_path, reference_text)
-            
+    
             if results:
-                # Return the results as a JSON response to React frontend
                 return jsonify(results), 200
             else:
                 return jsonify({"error": "An error occurred during document verification."}), 400
+
         except Exception as e:
             return jsonify({"error": f"Error during document validation: {str(e)}"}), 500
 

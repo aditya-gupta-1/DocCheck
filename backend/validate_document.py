@@ -92,7 +92,7 @@ def validate_document(document_path, template_path, reference_text):
         print(f"Overall Document Accuracy: {overall_accuracy}%")
 
         # Step 4: Document verification result
-        if layout_confidence > 85 and text_similarity > 50:
+        if layout_confidence > 80 and text_similarity > 50:
             verification_result = "Document Verified Successfully!"
         else:
             verification_result = "Document Verification Failed!"
