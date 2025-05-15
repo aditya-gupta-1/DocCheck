@@ -1,0 +1,10 @@
+flask
+torch
+torchvision
+sentence-transformers
+transformers
+easyocr
+opencv-python
+scikit-learn
+werkzeug
+flask-cors
